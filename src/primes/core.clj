@@ -9,15 +9,29 @@
 (defn is-prime
   "returns true if number is prime"
   [number]
-  (def root (int (Math/sqrt number)))
-  ;; if number is divisible by an number between 2 and it's sqrt,
-  ;; it is not a prime
-  (loop [iteration 2]
-    (if (> iteration root)
-      true
-      (if (= (rem number iteration) 0)
-        false
-        (recur (inc iteration))))))
+  (if (or (= number 0) (= number 1))
+    false
+    (do (def root (int (Math/sqrt number)))
+      ;; if number is divisible by an number between 2 and it's sqrt,
+      ;; it is not a prime
+      (loop [iteration 2]
+        (if (> iteration root)
+          true
+          (if (= (rem number iteration) 0)
+            false
+            (recur (inc iteration))))))))
+  
+(defn make-row
+  "Create row for primes multiplication table"
+  [primes spot]
+  (def row (vector (get primes spot)))
+  (println row)
+  (loop [number 0]
+    (when (<= (count row) (count primes))
+      (do (def row (conj row (* (get row 0) (get primes number))))
+          (recur (inc number))))))
+
+  
 
 (defn -main
   "Take in number of primes, find primes, print primes."
@@ -36,10 +50,28 @@
   (loop [number 2]
     (when (< (count primes) num-primes)
       (do (when (is-prime number)
-            (do (def primes (conj primes number))
-                 (println number)))
-          (recur (inc number))))))
+            (def primes (conj primes number)))
+          (recur (inc number)))))
 
+  ;; create table data
+  ;; TOP ROW: create string for top row of column names
+  (def col-str "  ")
+  (loop [it 0]
+    (when (< it (count primes))
+      (do (def col-str (str col-str (get primes it) " "))
+          (recur (inc it)))))
+
+
+  (make-row primes 0)
+  (def row-str (clojure.string/join " " row))
+
+  
+  ;; print table
+  (println col-str)
+  (println row-str)
+      
+  
+)
 
 
 
