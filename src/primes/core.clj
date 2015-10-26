@@ -54,22 +54,16 @@
 
   ;; create table data
   ;; TOP ROW: create string for top row of column names
-  (def col-str (str "  " (clojure.string/join " " primes)))
+  (def col-str (str "\t" (clojure.string/join "\t" primes)))
 
-  ;;(make-row primes 0)
-  (def row-str (clojure.string/join " " (make-row primes 0)))
-
-  
   ;; print table
   (println col-str)
   (loop [it 0]
     (when (< it (count primes))
       (do (make-row primes it)
-          (def row-str (clojure.string/join " " row))
+          (def row-str (clojure.string/join "\t" row))
           (println row-str))
           (recur (inc it))))
-      
-  
 )
 
 
