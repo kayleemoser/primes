@@ -25,7 +25,6 @@
   "Create row for primes multiplication table"
   [primes spot]
   (def row (vector (get primes spot)))
-  (println row)
   (loop [number 0]
     (when (<= (count row) (count primes))
       (do (def row (conj row (* (get row 0) (get primes number))))
@@ -55,20 +54,20 @@
 
   ;; create table data
   ;; TOP ROW: create string for top row of column names
-  (def col-str "  ")
-  (loop [it 0]
-    (when (< it (count primes))
-      (do (def col-str (str col-str (get primes it) " "))
-          (recur (inc it)))))
+  (def col-str (str "  " (clojure.string/join " " primes)))
 
-
-  (make-row primes 0)
-  (def row-str (clojure.string/join " " row))
+  ;;(make-row primes 0)
+  (def row-str (clojure.string/join " " (make-row primes 0)))
 
   
   ;; print table
   (println col-str)
-  (println row-str)
+  (loop [it 0]
+    (when (< it (count primes))
+      (do (make-row primes it)
+          (def row-str (clojure.string/join " " row))
+          (println row-str))
+          (recur (inc it))))
       
   
 )
